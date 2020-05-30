@@ -1,11 +1,31 @@
 import React from 'react';
+import {
+  Route,
+  NavLink,
+  HashRouter
+} from "react-router-dom";
+import Home from "./Home";
+import Quizzes from "./Quizzes";
+import Templates from "./Templates";
 import './App.css';
 
 function App() {
   return (
-    <div className="container">
+    <HashRouter>
+      <div className="container">
         <h1 className="title">Quiz App</h1>
-    </div>
+        <ul className="header">
+          <li><NavLink exact to="/">Home</NavLink></li>
+          <li><NavLink to="/templates">Templates</NavLink></li>
+          <li><NavLink to="/quizzes">Quizzes</NavLink></li>
+        </ul>
+        <div className="content">
+          <Route exact path="/" component={Home} />
+          <Route path="/templates" component={Templates} />
+          <Route path="/quizzes" component={Quizzes} />
+        </div>
+      </div>
+    </HashRouter>
   );
 }
 
