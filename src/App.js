@@ -3,10 +3,10 @@ import {
   Route,
   NavLink,
   HashRouter
-} from "react-router-dom";
-import Home from "./Home";
-import Quizzes from "./Quizzes";
-import Templates from "./Templates";
+} from 'react-router-dom';
+import Home from './Home';
+import Quizzes from './Quizzes';
+import Templates from './Templates';
 import './App.css';
 
 function App() {
