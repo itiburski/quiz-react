@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import QuizDataService from './services/quizDataService'
 
 function ListQuizzes(props) {
     return(
@@ -32,16 +33,14 @@ class Quizzes extends Component {
         };
     }
 
-    async componentDidMount() {
-        const url = 'http://localhost:8080/quiz/quizzes';
-
-        try {
-            const res = await fetch(url);
-            const data = await res.json();
-            this.setState({quizzes: data});
-        } catch (err) {
-            console.error(err);
-        }
+    componentDidMount() {
+        QuizDataService.getAll()
+            .then(response => {
+                this.setState({quizzes: response.data});
+            })
+            .catch(e =>{
+                console.error(e)
+            })
     }
 
     render() {

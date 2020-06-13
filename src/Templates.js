@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TemplateDataService from './services/templateDataService'
 
 function ListTemplates(props) {
     return(
@@ -24,6 +25,7 @@ function ListTemplates(props) {
 }
 
 class Templates extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -31,16 +33,14 @@ class Templates extends Component {
         };
     }
 
-    async componentDidMount() {    
-        const url = 'http://localhost:8080/quiz/templates';
-
-        try {
-            const res = await fetch(url);
-            const data = await res.json();
-            this.setState({templates: data});
-        } catch (err) {
-            console.error(err);
-        }
+    componentDidMount() {
+        TemplateDataService.getAll()
+            .then(response => {
+                this.setState({templates: response.data});
+            })
+            .catch(e => {
+                console.error(e);
+            })
     }
 
     render() {
