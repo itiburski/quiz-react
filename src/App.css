@@ -63,3 +63,35 @@ ul.header li a {
 .table th{
   font-size: 1.8rem;  
 }
+
+label {
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
+}
+
+input {
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  line-height: 2.8rem;
+  border: 1px solid #ddd;
+}
+
+button {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.75);
+  border-radius: 8px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 250ms;
+}
+
+button.action {
+  padding: 1rem 2rem;
+  margin: 1rem 1rem 1rem 0;
+  border-radius: 18px;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.85); 
+}

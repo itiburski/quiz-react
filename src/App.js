@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import Home from './Home';
 import Quizzes from './Quizzes';
-import Templates from './Templates';
+import TemplateContainer from './components/templates/TemplateContainer';
 import './App.css';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
         </ul>
         <div className="content">
           <Route exact path="/" component={Home} />
-          <Route path="/templates" component={Templates} />
+          <Route path="/templates" component={TemplateContainer} />
           <Route path="/quizzes" component={Quizzes} />
         </div>
       </div>
