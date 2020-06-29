@@ -16,7 +16,8 @@ class TemplateContainer extends Component {
         this.state = {
             templates: [],
             template: emptyTemplate,
-            listing: true
+            listing: true,
+            title: 'Template List'
         };
     }
 
@@ -42,7 +43,10 @@ class TemplateContainer extends Component {
     }
 
     showList = () => {
-        this.setState({listing: true});
+        this.setState({ 
+            listing: true,
+            title: 'Template List'
+        });
     }
 
     setActiveTemplate = (editTemplate) => {
@@ -70,10 +74,14 @@ class TemplateContainer extends Component {
         this.setActiveTemplate(emptyTemplate);
     }
 
+    setTitle = (newTitle) => {
+        this.setState({title: newTitle});
+    }
+
     render() {
         return (
             <div>
-                <h2 className="subtitle">Manage Templates</h2>
+                <h2 className="subtitle">{this.state.title}</h2>
 
                 {this.state.listing ? (
                     <div>
@@ -84,7 +92,7 @@ class TemplateContainer extends Component {
                     </div>
                 ) : (
                     <TemplateForm template={this.state.template} submitCallback = {this.refreshList}
-                    cancelCallback = {this.showList}  />
+                    cancelCallback = {this.showList} setTitleCallback = {this.setTitle} />
                 )}
             </div>
         )

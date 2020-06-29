@@ -38,8 +38,13 @@ class TemplateForm extends React.Component {
             });
     }
 
+    componentDidMount = () => {
+        const formTitle = this.state.isAdding ? 'New template' : 'Edit template';
+        this.props.setTitleCallback(formTitle);
+    }
+
     render() {
-        const buttonTitle = this.state.isAdding ? 'Add' : 'Edit';
+        const buttonTitle = this.state.isAdding ? 'Submit' : 'Update';
         return(
             <form onSubmit={this.handleSubmit}>
                 <input name="description" size="120" value={this.state.description} onChange={this.handleChange}
