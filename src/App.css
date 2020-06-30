@@ -95,3 +95,10 @@ button.action {
 button:hover {
   background-color: rgba(0, 0, 0, 0.85); 
 }
+
+.error-message {
+  background-color: #ff7272;
+  color: white;
+  padding: 1em;
+  font-size: 1.6rem;
+}

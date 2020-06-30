@@ -8,7 +8,8 @@ class TemplateForm extends React.Component {
             description: props.template.description,
             status: props.template.status,
             templateUid: props.template.templateUid,
-            isAdding: !props.template.templateUid || 0 === props.template.templateUid.length
+            isAdding: !props.template.templateUid || 0 === props.template.templateUid.length,
+            errorMessage: ''
         }
     }
 
@@ -24,6 +25,10 @@ class TemplateForm extends React.Component {
         }) 
     }
 
+    setErrorMessage = (message) => {
+        this.setState({ errorMessage: message });
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
         const {description, templateUid} = this.state;
@@ -33,8 +38,18 @@ class TemplateForm extends React.Component {
             .then(response => {
                 this.props.submitCallback();
             })
-            .catch(e => {
-                console.error(e);
+            .catch(error => {
+                if (error.response) {
+                    // Request made and server responded
+                    this.setErrorMessage(error.response.data.message);
+                  } else if (error.request) {
+                      console.log("error.request");
+                    // The request was made but no response was received
+                    console.log(error.request);
+                  } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                  }
             });
     }
 
@@ -47,6 +62,8 @@ class TemplateForm extends React.Component {
         const buttonTitle = this.state.isAdding ? 'Submit' : 'Update';
         return(
             <form onSubmit={this.handleSubmit}>
+                { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
+
                 <input name="description" size="120" value={this.state.description} onChange={this.handleChange}
                     placeholder="Description..." />
                 
