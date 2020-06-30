@@ -61,16 +61,16 @@ ul.header li a {
 }
 
 .table th{
-  font-size: 1.8rem;  
+  font-size: 2rem;
 }
 
 label {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   margin-bottom: 0.2rem;
 }
 
 input {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   padding: 0.5rem;
   line-height: 2.8rem;
   border: 1px solid #ddd;
@@ -81,7 +81,7 @@ button {
   color: white;
   border: 1px solid rgba(0, 0, 0, 0.75);
   border-radius: 8px;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   cursor: pointer;
   transition: background-color 250ms;
 }
@@ -102,3 +102,8 @@ button:hover {
   padding: 1em;
   font-size: 1.6rem;
 }
+
+p{
+  font-size: 1.2rem;
+}
+
