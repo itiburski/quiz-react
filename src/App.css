@@ -66,7 +66,10 @@ ul.header li a {
 
 label {
   font-size: 1.6rem;
-  margin-bottom: 0.2rem;
+}
+
+label.strong {
+  font-weight: bold;
 }
 
 input {
@@ -107,3 +110,6 @@ p{
   font-size: 1.2rem;
 }
 
+div.row{
+  padding: 0.7rem 0;
+}

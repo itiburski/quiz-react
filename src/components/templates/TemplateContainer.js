@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import TemplateDataService from '../../services/templateDataService'
-import { TemplateList } from './TemplateList';
+import TemplateList from './TemplateList';
 import TemplateForm from './TemplateForm';
+import TemplateDetail from './TemplateDetail';
+import { ModeEnum } from './../../ModeEnum';
 
 const emptyTemplate = {
     description: '',
@@ -16,7 +18,7 @@ class TemplateContainer extends Component {
         this.state = {
             templates: [],
             template: emptyTemplate,
-            listing: true,
+            mode: ModeEnum.LISTING,
             title: 'Template List'
         };
     }
@@ -38,22 +40,30 @@ class TemplateContainer extends Component {
     refreshList = () => {
         this.getAllTutorials();
         this.setState({
-                listing: true
+            mode: ModeEnum.LISTING
         });
     }
 
     showList = () => {
         this.setState({ 
-            listing: true,
+            mode: ModeEnum.LISTING,
             title: 'Template List'
         });
     }
 
-    setActiveTemplate = (editTemplate) => {
+    setEditTemplate = (editTemplate) => {
         this.setState(prevState => ({
             template: editTemplate,
-            listing: false
+            mode: ModeEnum.EDITING
         }));
+    }
+
+    setDetailTemplate = (detailTemplate) => {
+        this.setState(prevState => ({
+            template: detailTemplate,
+            mode: ModeEnum.DETAILING,
+            title: 'Template Detail'
+        }))
     }
 
     deleteTemplate = (templateToDelete) => {
@@ -71,7 +81,7 @@ class TemplateContainer extends Component {
     }
 
     handleNewdButton = (event) => {
-        this.setActiveTemplate(emptyTemplate);
+        this.setEditTemplate(emptyTemplate);
     }
 
     setTitle = (newTitle) => {
@@ -79,21 +89,32 @@ class TemplateContainer extends Component {
     }
 
     render() {
+        let content;
+
+        if (this.state.mode === ModeEnum.LISTING) {
+            content = 
+                <div>
+                    <p>{this.state.templates.length} templates found</p>
+                    <TemplateList templates = {this.state.templates} editCallback = {this.setEditTemplate}
+                        deleteCallback = {this.deleteTemplate} detailsCallback = {this.setDetailTemplate} />
+                    <button className="action" onClick={this.handleNewdButton}>New</button>
+                </div>
+        }
+
+        if (this.state.mode === ModeEnum.EDITING){ 
+            content = 
+                <TemplateForm template={this.state.template} submitCallback = {this.refreshList}
+                    cancelCallback = {this.showList} setTitleCallback = {this.setTitle} />
+        }
+
+        if (this.state.mode === ModeEnum.DETAILING){ 
+            content = <TemplateDetail template={this.state.template} cancelCallback = {this.showList} />
+        }
+
         return (
             <div>
                 <h2 className="subtitle">{this.state.title}</h2>
-
-                {this.state.listing ? (
-                    <div>
-                        <p>{this.state.templates.length} templates found</p>
-                        <TemplateList templates = {this.state.templates} editCallback = {this.setActiveTemplate}
-                            deleteCallback = {this.deleteTemplate} />
-                        <button className="action" onClick={this.handleNewdButton}>New</button>
-                    </div>
-                ) : (
-                    <TemplateForm template={this.state.template} submitCallback = {this.refreshList}
-                    cancelCallback = {this.showList} setTitleCallback = {this.setTitle} />
-                )}
+                {content}
             </div>
         )
     }
