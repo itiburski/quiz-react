@@ -1,4 +1,5 @@
 import React from 'react';
+import QuestionContainer from '../questions/QuestionContainer';
 
 class TemplateDetail extends React.Component {
     constructor(props){
@@ -20,7 +21,11 @@ class TemplateDetail extends React.Component {
                     <label className="strong">Status: </label> <label>{this.state.status}</label><br/>
                 </div>
 
-                <button className="action" onClick={() => this.props.cancelCallback()} >Cancel</button>
+                <hr/>
+
+                <QuestionContainer templateUid={this.state.templateUid} />
+
+                <button className="action" onClick={() => this.props.cancelCallback()} >Back</button>
             </div>
         )
     }
