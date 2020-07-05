@@ -79,6 +79,10 @@ input {
   border: 1px solid #ddd;
 }
 
+input.fullSize{
+  width: 100%;
+}
+
 button {
   background-color: rgba(0, 0, 0, 0.75);
   color: white;
@@ -112,4 +116,10 @@ p{
 
 div.row{
   padding: 0.7rem 0;
+}
+
+div.small {
+  margin: 0 10%;
+  padding: 10px;
+  border: 1px solid;
 }

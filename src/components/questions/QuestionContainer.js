@@ -36,12 +36,16 @@ class QuestionContainer extends React.Component {
                 this.setState({
                     questions: response.data.questions,
                 });
-                this.setQuestionToState(emptyQuestion);
-                this.setErrorMessage('');
+                this.clearQuestion();
             })
             .catch(error => {
                 console.error(error);
             });
+    }
+
+    clearQuestion = (e) => {
+        this.setQuestionToState(emptyQuestion);
+        this.setErrorMessage('');
     }
 
     setEditQuestion = (editQuestion) => {
@@ -83,9 +87,7 @@ class QuestionContainer extends React.Component {
         }
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-
+    saveQuestion = () => {
         const {templateUid, questionDescription, questionUid} = this.state;
         let action = this.state.isAdding 
             ? QuestionDataService.create(templateUid, questionDescription) 
@@ -117,8 +119,9 @@ class QuestionContainer extends React.Component {
 
                 { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
 
-                <QuestionForm questionDescription={this.state.questionDescription} handleChange={this.handleChange}
-                    submitCallback={this.handleSubmit} />
+                <QuestionForm questionUid={this.state.questionUid} questionDescription={this.state.questionDescription} 
+                    handleChange={this.handleChange}
+                    saveCallback={this.saveQuestion} cancelCallback={this.clearQuestion} />
 
                 <QuestionList questions={this.state.questions} editCallback={this.setEditQuestion} 
                     deleteCallback={this.deleteQuestion} />
