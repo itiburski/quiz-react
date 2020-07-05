@@ -17,9 +17,13 @@ class TemplateContainer extends Component {
         super(props);
         this.state = {
             templates: [],
-            template: emptyTemplate,
             mode: ModeEnum.LISTING,
-            title: 'Template List'
+            title: 'Template list',
+            templateUid: '',
+            templateDescription: '',
+            templateStatus: '',
+            isAdding: false,
+            errorMessage: ''
         };
     }
 
@@ -28,42 +32,41 @@ class TemplateContainer extends Component {
     }
 
     getAllTutorials() {
+        this.setListMode();
         TemplateDataService.getAll()
             .then(response => {
                 this.setState({ templates: response.data });
             })
-            .catch(e => {
-                console.error(e);
+            .catch(error => {
+                this.handleDataServiceError(error);
             });
     }
 
-    refreshList = () => {
-        this.getAllTutorials();
+    changeMode(template, mode, title) {
         this.setState({
-            mode: ModeEnum.LISTING
+            templateUid: template.templateUid,
+            templateDescription: template.description,
+            templateStatus: template.status,
+            isAdding: !template.templateUid || 0 === template.templateUid.length,
+            mode: mode,
+            title: title
         });
     }
 
-    showList = () => {
-        this.setState({ 
-            mode: ModeEnum.LISTING,
-            title: 'Template List'
-        });
+    setListMode = () => {
+        this.changeMode(emptyTemplate, ModeEnum.LISTING, 'Template list');
     }
 
-    setEditTemplate = (editTemplate) => {
-        this.setState(prevState => ({
-            template: editTemplate,
-            mode: ModeEnum.EDITING
-        }));
+    setAddMode = () => {
+        this.changeMode(emptyTemplate, ModeEnum.EDITING, 'New template');
     }
 
-    setDetailTemplate = (detailTemplate) => {
-        this.setState(prevState => ({
-            template: detailTemplate,
-            mode: ModeEnum.DETAILING,
-            title: 'Template Detail'
-        }))
+    setEditMode = (editTemplate) => {
+        this.changeMode(editTemplate, ModeEnum.EDITING, 'Edit template');
+    }
+
+    setDetailMode = (detailTemplate) => {
+        this.changeMode(detailTemplate, ModeEnum.DETAILING, 'Template detail');
     }
 
     deleteTemplate = (templateToDelete) => {
@@ -72,20 +75,65 @@ class TemplateContainer extends Component {
         if (confirmDelete) {
             TemplateDataService.delete(templateToDelete.templateUid)
                 .then(response => {
-                    this.refreshList();
+                    this.getAllTutorials();
                 })
-                .catch(e => {
-                    console.error(e);
+                .catch(error => {
+                    this.handleDataServiceError(error);
                 });
         }
     }
 
-    handleNewdButton = (event) => {
-        this.setEditTemplate(emptyTemplate);
+    saveTemplate = () => {
+        const {templateDescription, templateUid} = this.state;
+        let action = this.state.isAdding ? TemplateDataService.create(templateDescription) : TemplateDataService.update(templateUid, templateDescription);
+
+        action
+            .then(response => {
+                this.getAllTutorials();
+            })
+            .catch(error => {
+                this.handleDataServiceError(error);
+            });
+    }
+
+    handleDataServiceError(error) {
+        if (error.response) {
+            // Request made and server responded
+            this.setErrorMessage(error.response.data.message);
+        }
+        else if (error.request) {
+            console.log("error.request");
+            // The request was made but no response was received
+            console.log(error.request);
+        }
+        else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
     }
 
     setTitle = (newTitle) => {
         this.setState({title: newTitle});
+    }
+
+    setErrorMessage = (message) => {
+        this.setState({ errorMessage: message });
+    }
+
+    handleNewdButton = (event) => {
+        this.setAddMode();
+    }
+
+    handleChange = (event) => {
+        const {name, value, type, checked} = event.target
+        type === "checkbox" ? 
+            this.setState({
+                [name]: checked
+            })
+        :
+            this.setState({
+                [name]: value
+            });
     }
 
     render() {
@@ -95,20 +143,27 @@ class TemplateContainer extends Component {
             content = 
                 <div>
                     <p>{this.state.templates.length} templates found</p>
-                    <TemplateList templates = {this.state.templates} editCallback = {this.setEditTemplate}
-                        deleteCallback = {this.deleteTemplate} detailsCallback = {this.setDetailTemplate} />
+                    <TemplateList templates = {this.state.templates} editFn={this.setEditMode}
+                        deleteFn={this.deleteTemplate} detailFn={this.setDetailMode} />
                     <button className="action" onClick={this.handleNewdButton}>New</button>
                 </div>
         }
 
         if (this.state.mode === ModeEnum.EDITING){ 
             content = 
-                <TemplateForm template={this.state.template} submitCallback = {this.refreshList}
-                    cancelCallback = {this.showList} setTitleCallback = {this.setTitle} />
+                <div>
+                    { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
+                    <TemplateForm templateDescription={this.state.templateDescription} 
+                        saveTemplateFn={this.saveTemplate} cancelFn={this.setListMode} 
+                        handleChange={this.handleChange} isAdding={this.state.isAdding} />
+                </div>
         }
 
         if (this.state.mode === ModeEnum.DETAILING){ 
-            content = <TemplateDetail template={this.state.template} cancelCallback = {this.showList} />
+            content = 
+                <TemplateDetail templateUid={this.state.templateUid} 
+                    templateDescription={this.state.templateDescription} templateStatus={this.state.templateStatus}
+                    cancelFn={this.setListMode} />
         }
 
         return (

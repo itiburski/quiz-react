@@ -7,9 +7,9 @@ function TemplateList(props) {
             <td>{template.description}</td>
             <td>{template.status}</td>
             <td>
-                <button onClick={() => props.detailsCallback(template) }>Details/Questions</button>&nbsp;
-                <button onClick={() => props.editCallback(template) }>Edit</button>&nbsp;
-                <button onClick={() => props.deleteCallback(template) }>Delete</button>
+                <button onClick={() => props.detailFn(template) }>Details/Questions</button>&nbsp;
+                <button onClick={() => props.editFn(template) }>Edit</button>&nbsp;
+                <button onClick={() => props.deleteFn(template) }>Delete</button>
             </td>
         </tr>
     ))

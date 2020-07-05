@@ -1,34 +1,24 @@
 import React from 'react';
 import QuestionContainer from '../questions/QuestionContainer';
 
-class TemplateDetail extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            description: props.template.description,
-            status: props.template.status,
-            templateUid: props.template.templateUid
-        }
-    }
+function TemplateDetail (props) {
 
-    render() {
-        return (
-            <div>
-                <div className="row">
-                    <label className="strong">Description: </label> <label>{this.state.description}</label><br/>
-                </div>
-                <div className="row">
-                    <label className="strong">Status: </label> <label>{this.state.status}</label><br/>
-                </div>
-
-                <hr/>
-
-                <QuestionContainer templateUid={this.state.templateUid} />
-
-                <button className="action" onClick={() => this.props.cancelCallback()} >Back</button>
+    return (
+        <div>
+            <div className="row">
+                <label className="strong">Description: </label> <label>{props.templateDescription}</label><br/>
             </div>
-        )
-    }
+            <div className="row">
+                <label className="strong">Status: </label> <label>{props.templateStatus}</label><br/>
+            </div>
+
+            <hr/>
+
+            <QuestionContainer templateUid={props.templateUid} />
+
+            <button className="action" onClick={() => props.cancelFn()} >Back</button>
+        </div>
+    )
 }
 
 export default TemplateDetail;
