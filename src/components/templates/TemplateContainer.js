@@ -50,7 +50,8 @@ class TemplateContainer extends Component {
             templateStatus: template.status,
             isAdding: !template.templateUid || 0 === template.templateUid.length,
             mode: mode,
-            title: title
+            title: title,
+            errorMessage: ''
         });
     }
 
@@ -124,13 +125,12 @@ class TemplateContainer extends Component {
             this.setErrorMessage(error.response.data.message);
         }
         else if (error.request) {
-            console.log("error.request");
             // The request was made but no response was received
-            console.log(error.request);
+            console.log("error.request", error.request);
         }
         else {
             // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
+            console.log('error.message', error.message);
         }
     }
 
@@ -164,6 +164,7 @@ class TemplateContainer extends Component {
         if (this.state.mode === ModeEnum.LISTING) {
             content = 
                 <div>
+                    { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <p>{this.state.templates.length} templates found</p>
                     <TemplateList templates = {this.state.templates} editFn={this.setEditMode}
                         deleteFn={this.deleteTemplate} detailFn={this.setDetailMode} />
