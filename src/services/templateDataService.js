@@ -16,6 +16,15 @@ class TemplateDataService {
     delete(templateUid) {
         return http.delete(`/templates/${templateUid}`);
     }
+
+    activate(templateUid) {
+        return http.post(`/templates/${templateUid}/activate`,);
+    }
+
+    inactivate(templateUid) {
+        return http.post(`/templates/${templateUid}/inactivate`,);
+    }
+
 }
 
 export default new TemplateDataService();

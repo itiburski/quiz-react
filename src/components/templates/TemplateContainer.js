@@ -3,7 +3,8 @@ import TemplateDataService from '../../services/templateDataService'
 import TemplateList from './TemplateList';
 import TemplateForm from './TemplateForm';
 import TemplateDetail from './TemplateDetail';
-import { ModeEnum } from './../../ModeEnum';
+import { ModeEnum } from '../../enums/ModeEnum';
+import { TemplateStatusEnum } from '../../enums/TemplateStatusEnum';
 
 const emptyTemplate = {
     description: '',
@@ -96,6 +97,27 @@ class TemplateContainer extends Component {
             });
     }
 
+    updateTemplateStatus = (event) => {
+        event.preventDefault();
+
+        let action;
+        if (TemplateStatusEnum.PENDING === this.state.templateStatus) {
+            action = TemplateDataService.activate(this.state.templateUid);
+        } else if (TemplateStatusEnum.ACTIVE === this.state.templateStatus) {
+            action = TemplateDataService.inactivate(this.state.templateUid);
+        }
+
+        if (action) {
+            action
+                .then(response => {
+                    this.getAllTutorials();
+                })
+                .catch(error => {
+                    this.handleDataServiceError(error);
+                });
+        }
+    }
+
     handleDataServiceError(error) {
         if (error.response) {
             // Request made and server responded
@@ -163,7 +185,7 @@ class TemplateContainer extends Component {
             content = 
                 <TemplateDetail templateUid={this.state.templateUid} 
                     templateDescription={this.state.templateDescription} templateStatus={this.state.templateStatus}
-                    cancelFn={this.setListMode} />
+                    cancelFn={this.setListMode} updateTemplateStatusCallback={this.updateTemplateStatus} />
         }
 
         return (
