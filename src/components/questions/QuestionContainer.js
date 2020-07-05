@@ -81,8 +81,8 @@ class QuestionContainer extends React.Component {
                 .then(response => {
                     this.getAllQuestions();
                 })
-                .catch(e => {
-                    console.error(e);
+                .catch(error => {
+                    this.handleDataServiceError(error);
                 });
         }
     }
@@ -98,18 +98,24 @@ class QuestionContainer extends React.Component {
                 this.getAllQuestions();
             })
             .catch(error => {
-                if (error.response) {
-                    // Request made and server responded
-                    this.setErrorMessage(error.response.data.message);
-                  } else if (error.request) {
-                      console.log("error.request");
-                    // The request was made but no response was received
-                    console.log(error.request);
-                  } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                  }
+                this.handleDataServiceError(error);
             });
+    }
+
+    handleDataServiceError(error) {
+        if (error.response) {
+            // Request made and server responded
+            this.setErrorMessage(error.response.data.message);
+        }
+        else if (error.request) {
+            console.log("error.request");
+            // The request was made but no response was received
+            console.log(error.request);
+        }
+        else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
     }
 
     render() {
