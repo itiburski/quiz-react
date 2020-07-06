@@ -2,6 +2,7 @@ import React from 'react';
 import QuestionDataService from '../../services/questionDataService';
 import QuestionList from '../questions/QuestionList';
 import QuestionForm from '../questions/QuestionForm';
+import handleChange from '../../util/handleChange';
 
 const emptyQuestion = {
     description: '',
@@ -55,18 +56,6 @@ class QuestionContainer extends React.Component {
 
     componentDidMount = () => {
         this.getAllQuestions();
-    }
-
-    handleChange = (event) => {
-        const {name, value, type, checked} = event.target;
-        type === "checkbox" ? 
-            this.setState({
-                [name]: checked
-            })
-        :
-        this.setState({
-            [name]: value
-        }) 
     }
 
     setErrorMessage = (message) => {
@@ -126,7 +115,7 @@ class QuestionContainer extends React.Component {
                 { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
 
                 <QuestionForm questionUid={this.state.questionUid} questionDescription={this.state.questionDescription} 
-                    handleChange={this.handleChange}
+                    handleChange={handleChange.bind(this)}
                     saveCallback={this.saveQuestion} cancelCallback={this.clearQuestion} />
 
                 <QuestionList questions={this.state.questions} editCallback={this.setEditQuestion} 

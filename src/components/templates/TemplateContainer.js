@@ -5,6 +5,7 @@ import TemplateForm from './TemplateForm';
 import TemplateDetail from './TemplateDetail';
 import { ModeEnum } from '../../enums/ModeEnum';
 import { TemplateStatusEnum } from '../../enums/TemplateStatusEnum';
+import handleChange from '../../util/handleChange';
 
 const emptyTemplate = {
     description: '',
@@ -146,18 +147,6 @@ class TemplateContainer extends Component {
         this.setAddMode();
     }
 
-    handleChange = (event) => {
-        const {name, value, type, checked} = event.target
-        type === "checkbox" ? 
-            this.setState({
-                [name]: checked
-            })
-        :
-            this.setState({
-                [name]: value
-            });
-    }
-
     render() {
         let content;
 
@@ -178,7 +167,7 @@ class TemplateContainer extends Component {
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <TemplateForm templateDescription={this.state.templateDescription} 
                         saveTemplateFn={this.saveTemplate} cancelFn={this.setListMode} 
-                        handleChange={this.handleChange} isAdding={this.state.isAdding} />
+                        handleChange={handleChange.bind(this)} isAdding={this.state.isAdding} />
                 </div>
         }
 
