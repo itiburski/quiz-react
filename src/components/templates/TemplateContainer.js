@@ -99,17 +99,20 @@ class TemplateContainer extends Component {
             });
     }
 
-    updateTemplateStatus = (event) => {
-        event.preventDefault();
-
+    updateTemplateStatus = (template) => {
+        let msg;
         let action;
-        if (TemplateStatusEnum.PENDING === this.state.templateStatus) {
-            action = TemplateDataService.activate(this.state.templateUid);
-        } else if (TemplateStatusEnum.ACTIVE === this.state.templateStatus) {
-            action = TemplateDataService.inactivate(this.state.templateUid);
+        if (TemplateStatusEnum.PENDING === template.status) {
+            action = TemplateDataService.activate(template.templateUid);
+            msg = 'activate';
+        } else if (TemplateStatusEnum.ACTIVE === template.status) {
+            action = TemplateDataService.inactivate(template.templateUid);
+            msg = 'inactivate';
         }
 
-        if (action) {
+        let confirmChangeStatus = window.confirm(`Confirm ${msg} template?`);
+
+        if (confirmChangeStatus && action) {
             action
                 .then(response => {
                     this.getAllTutorials();
@@ -156,7 +159,8 @@ class TemplateContainer extends Component {
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <p>{this.state.templates.length} templates found</p>
                     <TemplateList templates = {this.state.templates} editFn={this.setEditMode}
-                        deleteFn={this.deleteTemplate} detailFn={this.setDetailMode} />
+                        deleteFn={this.deleteTemplate} detailFn={this.setDetailMode}
+                        updateTemplateStatusFn={this.updateTemplateStatus} />
                     <button className="action" onClick={this.handleNewdButton}>New</button>
                 </div>
         }
@@ -175,7 +179,7 @@ class TemplateContainer extends Component {
             content = 
                 <TemplateDetail templateUid={this.state.templateUid} 
                     templateDescription={this.state.templateDescription} templateStatus={this.state.templateStatus}
-                    cancelFn={this.setListMode} updateTemplateStatusCallback={this.updateTemplateStatus} />
+                    cancelFn={this.setListMode} />
         }
 
         return (

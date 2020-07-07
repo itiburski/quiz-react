@@ -1,4 +1,5 @@
 import React from 'react';
+import { TemplateStatusEnum } from '../../enums/TemplateStatusEnum';
 
 function TemplateList(props) {
 
@@ -7,9 +8,16 @@ function TemplateList(props) {
             <td>{template.description}</td>
             <td>{template.status}</td>
             <td>
-                <button onClick={() => props.detailFn(template) }>Details/Questions</button>&nbsp;
                 <button onClick={() => props.editFn(template) }>Edit</button>&nbsp;
-                <button onClick={() => props.deleteFn(template) }>Delete</button>
+                <button onClick={() => props.deleteFn(template) }>Delete</button>&nbsp;
+                <button onClick={() => props.detailFn(template) }>Questions</button>&nbsp;
+
+                {template.status !== TemplateStatusEnum.INACTIVE ?
+                    <button onClick={() => props.updateTemplateStatusFn(template)}>
+                        { template.status === TemplateStatusEnum.PENDING ? 'Activate': '' }
+                        { template.status === TemplateStatusEnum.ACTIVE ? 'Inactivate' : '' }
+                    </button>
+                : '' }
             </td>
         </tr>
     ))
