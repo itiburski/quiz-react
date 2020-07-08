@@ -127,14 +127,10 @@ class TemplateContainer extends Component {
         if (error.response) {
             // Request made and server responded
             this.setErrorMessage(error.response.data.message);
-        }
-        else if (error.request) {
-            // The request was made but no response was received
-            console.log("error.request", error.request);
-        }
-        else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             console.log('error.message', error.message);
+            this.setErrorMessage(error.message);
         }
     }
 
