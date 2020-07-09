@@ -1,7 +1,8 @@
 const ModeEnum = Object.freeze({
-    LISTING: "L",
-    EDITING: "E",
-    DETAILING: "D"
+    LISTING: 'L',
+    EDITING: 'E',
+    ADDING: 'A',
+    DETAILING: 'D'
 });
 
 module.exports = {

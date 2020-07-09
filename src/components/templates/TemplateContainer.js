@@ -24,7 +24,6 @@ class TemplateContainer extends Component {
             templateUid: '',
             templateDescription: '',
             templateStatus: '',
-            isAdding: false,
             errorMessage: ''
         };
     }
@@ -49,7 +48,6 @@ class TemplateContainer extends Component {
             templateUid: template.templateUid,
             templateDescription: template.description,
             templateStatus: template.status,
-            isAdding: !template.templateUid || 0 === template.templateUid.length,
             mode: mode,
             title: title,
             errorMessage: ''
@@ -61,7 +59,7 @@ class TemplateContainer extends Component {
     }
 
     setAddMode = () => {
-        this.changeMode(emptyTemplate, ModeEnum.EDITING, 'New template');
+        this.changeMode(emptyTemplate, ModeEnum.ADDING, 'New template');
     }
 
     setEditMode = (editTemplate) => {
@@ -88,7 +86,7 @@ class TemplateContainer extends Component {
 
     saveTemplate = () => {
         const {templateDescription, templateUid} = this.state;
-        let action = this.state.isAdding ? TemplateDataService.create(templateDescription) : TemplateDataService.update(templateUid, templateDescription);
+        let action = ModeEnum.ADDING === this.state.mode ? TemplateDataService.create(templateDescription) : TemplateDataService.update(templateUid, templateDescription);
 
         action
             .then(response => {
@@ -161,13 +159,13 @@ class TemplateContainer extends Component {
                 </div>
         }
 
-        if (this.state.mode === ModeEnum.EDITING){ 
+        if (this.state.mode === ModeEnum.ADDING || this.state.mode === ModeEnum.EDITING){ 
             content = 
                 <div>
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <TemplateForm templateDescription={this.state.templateDescription} 
                         saveTemplateFn={this.saveTemplate} cancelFn={this.setListMode} 
-                        handleChange={handleChange.bind(this)} isAdding={this.state.isAdding} />
+                        handleChange={handleChange.bind(this)} isAdding={ModeEnum.ADDING === this.state.mode} />
                 </div>
         }
 
