@@ -83,6 +83,17 @@ input.fullSize{
   width: 100%;
 }
 
+select {
+  font-size: 1.6rem;
+  padding: 0.5rem;
+  line-height: 2.8rem;
+  border: 1px solid #ddd;
+}
+
+select.fullSize{
+  width: 100%;
+}
+
 button {
   background-color: rgba(0, 0, 0, 0.75);
   color: white;

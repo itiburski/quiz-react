@@ -5,6 +5,10 @@ class TemplateDataService {
         return http.get('/templates');
     }
 
+    getActives() {
+        return http.get('/templates/active');
+    }
+
     create(description) {
         return http.post('/templates', {description});
     }
@@ -23,6 +27,10 @@ class TemplateDataService {
 
     inactivate(templateUid) {
         return http.post(`/templates/${templateUid}/inactivate`,);
+    }
+
+    createQuiz(templateUid, body) {
+        return http.post(`/templates/${templateUid}/quizzes`, body);
     }
 
 }
