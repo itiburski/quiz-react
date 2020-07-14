@@ -4,16 +4,20 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 function QuizForm (props) {
     const buttonTitle = props.isAdding ? 'Submit' : 'Update';
-    let templateElements =
-        <div className="row">
-            <label className="strong">Template: </label>
-            <br/>
-            <select className="fullSize" key={props.templateUid} value={props.templateUid} name="templateUid" onChange={props.handleChange}>
-                <option key="empty" value="">-- Choose a template --</option>
-                {props.templates.map(template => <option key={template.templateUid} value={template.templateUid}>{template.description}</option>)}
-            </select>
-            <br/>
-        </div>
+    let templateElements;
+
+    if (props.isAdding) {
+        templateElements =
+            <div className="row">
+                <label className="strong">Template: </label>
+                <br/>
+                <select className="fullSize" key={props.templateUid} value={props.templateUid} name="templateUid" onChange={props.handleChange}>
+                    <option key="empty" value="">-- Choose a template --</option>
+                    {props.templates.map(template => <option key={template.templateUid} value={template.templateUid}>{template.description}</option>)}
+                </select>
+                <br/>
+            </div>
+    }
 
     return(
         <form>

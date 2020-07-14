@@ -15,7 +15,9 @@ function QuizList(props) {
                     <tr key={quiz.quizUid}>
                         <td>{quiz.description}</td>
                         <td>{quiz.status}</td>
-                        <td></td>
+                        <td>
+                            <button onClick={() => props.editFn(quiz) }>Edit</button>&nbsp;
+                        </td>
                     </tr>
                 ))}
             </tbody>

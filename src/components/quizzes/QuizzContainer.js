@@ -9,7 +9,9 @@ import handleChange from '../../util/handleChange';
 const emptyQuiz = {
     description: '',
     status: '',
-    quizUid: ''
+    quizUid: '',
+    begin: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
+    end: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())
 };
 
 class QuizzContainer extends Component {
@@ -22,8 +24,8 @@ class QuizzContainer extends Component {
             quizUid: '',
             quizDescription: '',
             quizStatus: '',
-            quizBegin: '',
-            quizEnd: '',
+            quizBegin: new Date(),
+            quizEnd: new Date(),
             isAdding: false,
             mode: ModeEnum.LISTING,
             title: 'Quiz list',
@@ -41,7 +43,16 @@ class QuizzContainer extends Component {
         this.setListMode();
         QuizDataService.getAll()
             .then(response => {
-                this.setState({quizzes: response.data});
+                const mapQuizzes = response.data.map(quiz => {
+                    return {
+                        quizUid: quiz.quizUid,
+                        description: quiz.description,
+                        status: quiz.status,
+                        begin: new Date(quiz.begin),
+                        end: new Date(quiz.end)
+                    }
+                });
+                this.setState({quizzes: mapQuizzes});
             })
             .catch(error => {
                 this.handleDataServiceError(error);
@@ -64,6 +75,8 @@ class QuizzContainer extends Component {
             quizUid: quiz.quizUid,
             quizDescription: quiz.description,
             quizStatus: quiz.status,
+            quizBegin: quiz.begin,
+            quizEnd: quiz.end,
             isAdding: !quiz.quizUid || 0 === quiz.quizUid.length,
             mode: mode,
             title: title,
@@ -91,9 +104,9 @@ class QuizzContainer extends Component {
         return (!str || 0 === str.length);
     }
     saveQuiz = () => {
-        const {templateUid, quizDescription, quizBegin, quizEnd} = this.state;
+        const {templateUid, quizUid, quizDescription, quizBegin, quizEnd} = this.state;
 
-        if (this.isEmpty(templateUid)){
+        if (this.state.isAdding && this.isEmpty(templateUid)){
             this.setErrorMessage("Template is mandatory");
             return;
         }
@@ -109,7 +122,7 @@ class QuizzContainer extends Component {
             end: quizEnd
         };
 
-        let action = ModeEnum.ADDING === this.state.mode ? TemplateDataService.createQuiz(templateUid, body) : null;
+        let action = ModeEnum.ADDING === this.state.mode ? TemplateDataService.createQuiz(templateUid, body) : QuizDataService.update(quizUid, body);
 
         action
             .then(response => {
@@ -140,11 +153,6 @@ class QuizzContainer extends Component {
     }
 
     handleNewdButton = (event) => {
-        const today = new Date();
-        const quizBegin = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        const quizEnd = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
-        this.setState({quizBegin: quizBegin, quizEnd: quizEnd});
-
         this.setAddMode();
     }
 
@@ -168,12 +176,12 @@ class QuizzContainer extends Component {
                 <div>
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <p>{this.state.quizzes.length} quizzes found</p>
-                    <QuizList quizzes = {this.state.quizzes} />
+                    <QuizList quizzes = {this.state.quizzes} editFn={this.setEditMode} />
                     <button className="action" onClick={this.handleNewdButton}>New</button>
                 </div>
         }
 
-        if (this.state.mode === ModeEnum.ADDING){
+        if (this.state.mode === ModeEnum.ADDING || this.state.mode === ModeEnum.EDITING){
             content =
                 <div>
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
