@@ -1,6 +1,8 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import setHours from 'date-fns/setHours'
+import setMinutes from 'date-fns/setMinutes'
 
 function QuizForm (props) {
     const buttonTitle = props.isAdding ? 'Submit' : 'Update';
@@ -32,16 +34,24 @@ function QuizForm (props) {
             </div>
 
             <div className="row">
-                <label className="strong">Begin date: </label>
+                <label className="strong">Begin date/time: </label>
                 <br/>
-                <DatePicker selected={props.quizBegin} onChange={props.handleQuizBeginChangeFn} dateFormat="MMMM d, yyyy"/>
+                <DatePicker selected={props.quizBegin} onChange={props.handleQuizBeginChangeFn} 
+                    showTimeSelect timeFormat="HH:mm" dateFormat="MMMM d, yyyy HH:mm"
+                    injectTimes={[
+                      setHours(setMinutes(new Date(), 59), 23)
+                    ]} />
                 <br/>
             </div>
 
             <div className="row">
-                <label className="strong">End date: </label>
+                <label className="strong">End date/time: </label>
                 <br/>
-                <DatePicker selected={props.quizEnd} onChange={props.handleQuizEndChangeFn} dateFormat="MMMM d, yyyy"/>
+                <DatePicker  selected={props.quizEnd} onChange={props.handleQuizEndChangeFn} 
+                    showTimeSelect timeFormat="HH:mm" dateFormat="MMMM d, yyyy HH:mm"
+                    injectTimes={[
+                      setHours(setMinutes(new Date(), 59), 23)
+                    ]} />
                 <br/>
             </div>
 

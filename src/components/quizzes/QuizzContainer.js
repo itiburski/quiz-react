@@ -10,8 +10,8 @@ const emptyQuiz = {
     description: '',
     status: '',
     quizUid: '',
-    begin: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
-    end: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())
+    begin: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0),
+    end: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate(), 23, 59, 59)
 };
 
 class QuizzContainer extends Component {
