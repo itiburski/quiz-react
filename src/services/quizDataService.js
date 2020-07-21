@@ -9,6 +9,10 @@ class QuizDataService {
         return http.put(`/quizzes/${quizUid}`, body);
     }
 
+    delete(quizUid) {
+        return http.delete(`/quizzes/${quizUid}`);
+    }
+
 }
 
 export default new QuizDataService();

@@ -103,6 +103,7 @@ class QuizzContainer extends Component {
     isEmpty = (str) => {
         return (!str || 0 === str.length);
     }
+
     saveQuiz = () => {
         const {templateUid, quizUid, quizDescription, quizBegin, quizEnd} = this.state;
 
@@ -131,6 +132,20 @@ class QuizzContainer extends Component {
             .catch(error => {
                 this.handleDataServiceError(error);
             });
+    }
+
+    deleteQuiz = (quizToDelete) => {
+        let confirmDelete = window.confirm('Delete quiz?');
+
+        if (confirmDelete) {
+            QuizDataService.delete(quizToDelete.quizUid)
+                .then(response => {
+                    this.getAllQuizzes();
+                })
+                .catch(error => {
+                    this.handleDataServiceError(error);
+                });
+        }
     }
 
     handleDataServiceError(error) {
@@ -176,7 +191,8 @@ class QuizzContainer extends Component {
                 <div>
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <p>{this.state.quizzes.length} quizzes found</p>
-                    <QuizList quizzes = {this.state.quizzes} editFn={this.setEditMode} />
+                    <QuizList quizzes = {this.state.quizzes} editFn={this.setEditMode}
+                        deleteFn={this.deleteQuiz} />
                     <button className="action" onClick={this.handleNewdButton}>New</button>
                 </div>
         }

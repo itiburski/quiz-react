@@ -17,6 +17,7 @@ function QuizList(props) {
                         <td>{quiz.status}</td>
                         <td>
                             <button onClick={() => props.editFn(quiz) }>Edit</button>&nbsp;
+                            <button onClick={() => props.deleteFn(quiz) }>Delete</button>&nbsp;
                         </td>
                     </tr>
                 ))}
