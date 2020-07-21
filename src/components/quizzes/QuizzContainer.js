@@ -5,6 +5,7 @@ import QuizList from './QuizList';
 import QuizForm from './QuizForm';
 import { ModeEnum } from '../../enums/ModeEnum';
 import handleChange from '../../util/handleChange';
+import { QuizStatusEnum } from '../../enums/QuizStatusEnum';
 
 const emptyQuiz = {
     description: '',
@@ -148,6 +149,30 @@ class QuizzContainer extends Component {
         }
     }
 
+    updateQuizStatus = (quiz) => {
+        let msg;
+        let action;
+        if (QuizStatusEnum.PENDING === quiz.status) {
+            action = QuizDataService.start(quiz.quizUid);
+            msg = 'start';
+        } else if (QuizStatusEnum.ACTIVE === quiz.status) {
+            action = QuizDataService.end(quiz.quizUid);
+            msg = 'end';
+        }
+
+        let confirmChangeStatus = window.confirm(`Confirm ${msg} quiz?`);
+
+        if (confirmChangeStatus && action) {
+            action
+                .then(response => {
+                    this.getAllQuizzes();
+                })
+                .catch(error => {
+                    this.handleDataServiceError(error);
+                });
+        }
+    }
+
     handleDataServiceError(error) {
         if (error.response) {
             // Request made and server responded
@@ -192,7 +217,7 @@ class QuizzContainer extends Component {
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <p>{this.state.quizzes.length} quizzes found</p>
                     <QuizList quizzes = {this.state.quizzes} editFn={this.setEditMode}
-                        deleteFn={this.deleteQuiz} />
+                        deleteFn={this.deleteQuiz} updateQuizStatusFn={this.updateQuizStatus} />
                     <button className="action" onClick={this.handleNewdButton}>New</button>
                 </div>
         }

@@ -13,6 +13,14 @@ class QuizDataService {
         return http.delete(`/quizzes/${quizUid}`);
     }
 
+    start(quizUid) {
+        return http.post(`/quizzes/${quizUid}/start`,);
+    }
+
+    end(quizUid) {
+        return http.post(`/quizzes/${quizUid}/end`,);
+    }
+
 }
 
 export default new QuizDataService();
