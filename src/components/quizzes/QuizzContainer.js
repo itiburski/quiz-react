@@ -6,6 +6,7 @@ import QuizForm from './QuizForm';
 import { ModeEnum } from '../../enums/ModeEnum';
 import handleChange from '../../util/handleChange';
 import { QuizStatusEnum } from '../../enums/QuizStatusEnum';
+import QuizSummary from '../quizzes/QuizSummary';
 
 const emptyQuiz = {
     description: '',
@@ -31,7 +32,8 @@ class QuizzContainer extends Component {
             mode: ModeEnum.LISTING,
             title: 'Quiz list',
             errorMessage: '',
-            activeTemplates: []
+            activeTemplates: [],
+            summary: null
         };
     }
 
@@ -93,12 +95,12 @@ class QuizzContainer extends Component {
         this.changeMode(emptyQuiz, ModeEnum.ADDING, 'New quiz');
     }
 
-    setEditMode = (editTemplate) => {
-        this.changeMode(editTemplate, ModeEnum.EDITING, 'Edit quiz');
+    setEditMode = (editQuiz) => {
+        this.changeMode(editQuiz, ModeEnum.EDITING, 'Edit quiz');
     }
 
-    setDetailMode = (detailTemplate) => {
-        this.changeMode(detailTemplate, ModeEnum.DETAILING, 'Quiz detail');
+    setSummaryMode = (summaryQuiz) => {
+        this.changeMode(summaryQuiz, ModeEnum.DETAILING, 'Quiz summary');
     }
 
     isEmpty = (str) => {
@@ -217,7 +219,8 @@ class QuizzContainer extends Component {
                     { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
                     <p>{this.state.quizzes.length} quizzes found</p>
                     <QuizList quizzes = {this.state.quizzes} editFn={this.setEditMode}
-                        deleteFn={this.deleteQuiz} updateQuizStatusFn={this.updateQuizStatus} />
+                        deleteFn={this.deleteQuiz} updateQuizStatusFn={this.updateQuizStatus}
+                        summaryFn={this.setSummaryMode} />
                     <button className="action" onClick={this.handleNewdButton}>New</button>
                 </div>
         }
@@ -233,6 +236,12 @@ class QuizzContainer extends Component {
                         handleQuizBeginChangeFn={this.handleQuizBeginChange}
                         handleQuizEndChangeFn={this.handleQuizEndChange} />
                 </div>
+        }
+
+        if (this.state.mode === ModeEnum.DETAILING){ 
+            content = 
+                <QuizSummary quizUid={this.state.quizUid} quizDescription={this.state.quizDescription}
+                    quizStatus={this.state.quizStatus} cancelFn={this.setListMode} />
         }
 
         return (

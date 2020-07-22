@@ -21,6 +21,10 @@ class QuizDataService {
         return http.post(`/quizzes/${quizUid}/end`,);
     }
 
+    summary(quizUid) {
+        return http.get(`/quizzes/${quizUid}/summary`,);
+    }
+
 }
 
 export default new QuizDataService();

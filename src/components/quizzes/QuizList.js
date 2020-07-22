@@ -25,7 +25,9 @@ function QuizList(props) {
                                     {quiz.status === QuizStatusEnum.PENDING ? 'Start' : ''}
                                     {quiz.status === QuizStatusEnum.ACTIVE ? 'End' : ''}
                                 </button>
-                            : ''}
+                            : 
+                                <button onClick={() => props.summaryFn(quiz)}>Summary</button>
+                            }
                         </td>
                     </tr>
                 ))}
