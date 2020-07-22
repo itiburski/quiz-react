@@ -69,6 +69,10 @@ ul li {
   font-size: 2rem;
 }
 
+.table td.center {
+  text-align: center;
+}
+
 label {
   font-size: 1.6rem;
 }
