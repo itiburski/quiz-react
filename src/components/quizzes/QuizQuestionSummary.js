@@ -78,7 +78,7 @@ class QuizQuestionSummary extends React.Component {
 
         return(
             <div className="small">
-                <h2 className="subtitle">Questions</h2>
+                <h2 className="subtitle">Answer summary</h2>
 
                 { this.state.errorMessage && <h3 className="error-message"> { this.state.errorMessage } </h3> }
 
